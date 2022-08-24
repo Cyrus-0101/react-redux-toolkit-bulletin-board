@@ -1,6 +1,8 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Bulletin Board",
+  "long_name": "Bulletin Board App",
+  "description": "Bulletin Board App",
+  "name": "Bulletin Board App",
   "icons": [
     {
       "src": "favicon.ico",
