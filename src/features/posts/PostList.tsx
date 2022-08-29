@@ -1,18 +1,18 @@
 import React from "react";
 import { useAppSelector } from "../../app/hooks";
 import { Tooltip } from "../../components/ToolTip";
+import PostAuthor from "./PostAuthor";
 import { selectAllPosts } from "./postSlice";
 
-interface Post {
-  id: number;
-  title: string;
-  body: string;
-}
-
 function PostList() {
-  // const dispatch = useAppDispatch();
-
   const posts = useAppSelector(selectAllPosts);
+
+  interface Post {
+    id: string;
+    title: string;
+    body: string;
+    userId: string;
+  }
 
   const renderedPosts = posts
     .map((post: Post) => (
@@ -28,6 +28,8 @@ function PostList() {
                 <em>{post.body.substring(0, 10)}&hellip;</em>
               </p>
             </Tooltip>
+
+            <PostAuthor userId={post.userId} />
           </li>
         </ul>
       </article>
