@@ -2,15 +2,16 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 interface Post {
   posts: {
-    id: number;
+    id: string;
     title: string;
     body: string;
+    userId: string;
   }[];
 }
 
 const initialState = [
-  { id: 1, title: "Hello World", body: "This is a post" },
-  { id: 2, title: "Hello World 2", body: "This is a post" },
+  { id: "1", title: "Hello World", body: "This is a post", userId: "1" },
+  { id: "2", title: "Hello World 2", body: "This is a post", userId: "2" },
 ];
 
 const postSlice = createSlice({
@@ -21,12 +22,13 @@ const postSlice = createSlice({
       reducer(state, action) {
         state.push(action.payload);
       },
-      prepare(title: string, body: string): any {
+      prepare(title: string, body: string, userId: string): any {
         return {
           payload: {
             id: nanoid(),
             title,
             body,
+            userId,
           },
         };
       },
