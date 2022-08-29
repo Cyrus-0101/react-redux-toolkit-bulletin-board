@@ -1,5 +1,6 @@
 import React from "react";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { selectAllUsers } from "../users/userSlice";
 import { postAdded } from "./postSlice";
 
 function AddPostForm() {
@@ -9,18 +10,35 @@ function AddPostForm() {
 
   const [body, setBody] = React.useState("");
 
+  const [userId, setUserId] = React.useState("");
+
+  const users = useAppSelector(selectAllUsers);
+
   const onTitleChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
     setTitle(e.target.value);
 
-  const onBodyChanged = (e: any) => setBody(e.target.value);
+  const onBodyChanged = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setBody(e.target.value);
+
+  const onAuthorChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setUserId(e.target.value);
+  };
 
   const onSubmit = () => {
     if (title && body) {
-      dispatch(postAdded(title, body));
+      dispatch(postAdded(title, body, userId));
       setTitle("");
       setBody("");
     }
   };
+
+  const canSave = Boolean(title) && Boolean(body) && Boolean(userId);
+
+  const usersOptions = users.map((user) => (
+    <option key={user.id} value={user.id}>
+      {user.name}
+    </option>
+  ));
 
   return (
     <div className="border border-3 border-warning rounded p-3 m-5 shadow-lg p-3 mb-5 bg-body rounded">
@@ -40,6 +58,20 @@ function AddPostForm() {
             onChange={onTitleChanged}
           />
 
+          <label htmlFor="postAuthor" className="mt-2">
+            Post Author
+          </label>
+
+          <select
+            className="form-select mb-2"
+            id="postAuthor"
+            value={userId}
+            onChange={onAuthorChanged}
+          >
+            <option value="">Select a User</option>
+            {usersOptions}
+          </select>
+
           <label htmlFor="body" className="mt-2">
             Body
           </label>
@@ -55,8 +87,9 @@ function AddPostForm() {
 
           <button
             type="button"
-            className="btn btn-primary mt-2"
+            className={!canSave ? "btn disabled mt-2" : "btn btn-primary mt-2"}
             onClick={onSubmit}
+            disabled={!canSave}
           >
             Add Bulletin
           </button>
